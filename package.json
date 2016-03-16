@@ -1,0 +1,21 @@
+{
+        "name": "state-land-cadastre",
+        "version": "0.0.0",
+        "description": "State land cadastre register",
+        "main": "main.js",
+        "dependencies": {
+                "bunyan": "1.5.1",
+                "posix-getopt": "1.2.0",
+                "restify-errors": "^3.1.0",
+                "restify": "^4.0.3",
+                "orm" : ">=2.0.0-alpha6",
+                "better-js-class": "*",
+                "cps": "*",
+                "mysql": "*",
+                "underscore": "*"
+        },
+        "scripts": {
+                "start": "node main.js 2>&1 | bunyan"
+        },
+        "author": "Glinskiy Vladislav"
+}
