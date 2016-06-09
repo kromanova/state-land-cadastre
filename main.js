@@ -50,7 +50,7 @@ var DATABASE = orm.connect({
         noAudit: true
     });
 
-    server.listen((8080), function onListening() {
+    server.listen((8080), '127.0.0.1', function onListening() {
         LOG.info('listening at %s', server.url);
     });
 })();

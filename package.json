@@ -12,7 +12,8 @@
                 "better-js-class": "*",
                 "cps": "*",
                 "mysql": "*",
-                "underscore": "*"
+                "underscore": "*",
+				"restify-formatter-jsonp": "*"
         },
         "scripts": {
                 "start": "node main.js 2>&1 | bunyan"

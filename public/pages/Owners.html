@@ -1,0 +1,317 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description" content="">
+    <meta name="author" content="">
+
+    <title>Database</title>
+
+    <!-- Bootstrap Core CSS -->
+    <link href="../bower_components/bootstrap/dist/css/bootstrap.min.css" rel="stylesheet">
+
+    <!-- MetisMenu CSS -->
+    <link href="../bower_components/metisMenu/dist/metisMenu.min.css" rel="stylesheet">
+
+    <!-- DataTables CSS -->
+    <link href="../bower_components/datatables-plugins/integration/bootstrap/3/dataTables.bootstrap.css" rel="stylesheet">
+
+    <!-- DataTables Responsive CSS -->
+    <link href="../bower_components/datatables-responsive/css/dataTables.responsive.css" rel="stylesheet">
+
+    <!-- Custom CSS -->
+    <link href="../dist/css/sb-admin-2.css" rel="stylesheet">
+
+    <!-- Custom Fonts -->
+    <link href="../bower_components/font-awesome/css/font-awesome.min.css" rel="stylesheet" type="text/css">
+</head>
+
+<body>
+    <div id="wrapper">
+        <!-- Navigation -->
+        <nav class="navbar navbar-default navbar-static-top" role="navigation" style="margin-bottom: 0">
+            <div class="navbar-header">
+                <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
+                    <span class="sr-only">Toggle navigation</span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                </button>
+                <a class="navbar-brand" href="index.html">Land Cadastre</a>
+            </div>
+            <!-- /.navbar-header -->
+            <ul class="nav navbar-top-links navbar-right">
+                <!-- /.dropdown -->
+                <li class="dropdown">
+                    <a class="dropdown-toggle" data-toggle="dropdown" href="#">
+                        <i class="fa fa-user fa-fw"></i>  <i class="fa fa-caret-down"></i>
+                    </a>
+                    <ul class="dropdown-menu dropdown-user">
+                        <li><a href="login.html"><i class="fa fa-sign-out fa-fw"></i> Logout</a>
+                        </li>
+                    </ul>
+                    <!-- /.dropdown-user -->
+                </li>
+                <!-- /.dropdown -->
+            </ul>
+            <!-- /.navbar-top-links -->
+
+
+                                    <div class="navbar-default sidebar" role="navigation">
+                                        <div class="sidebar-nav navbar-collapse">
+                                            <ul class="nav" id="side-menu">
+                                                <li class="sidebar-search">
+                                                    <div class="input-group custom-search-form">
+                                                        <input type="text" class="form-control" placeholder="Search...">
+                                                        <span class="input-group-btn">
+                                                        <button class="btn btn-default" type="button">
+                                                            <i class="fa fa-search"></i>
+                                                        </button>
+                                                    </span>
+                                                    </div>
+                                                    <!-- /input-group -->
+                                                </li>
+
+                                                <li>
+                                                    <a href="#"><i class="fa fa-table fa-fw"></i> Database<span class="fa arrow"></span></a>
+                                                    <ul class="nav nav-second-level">
+                                                        <li>
+                                                            <a href="Owners.html">Owners</a>
+                                                        </li>
+                                                        <li>
+                                                            <a href="Area.html">Area</a>
+                                                        </li>
+                                                        <li>
+                                                            <a href="OwnerArea.html">Owners and area</a>
+                                                        </li>
+                                                    </ul>
+                                                    <!-- /.nav-second-level -->
+                                                </li>
+                                                <li>
+
+                                                      <a href="#"><i class="fa fa-wrench fa-fw"></i> Add new<span class="fa arrow"></span></a>
+                                                      <ul class="nav nav-second-level">
+                                                          <li>
+                                                              <a href="ownerform.html">Owner</a>
+                                                          </li>
+                                                          <li>
+                                                              <a href="areaform.html">Area</a>
+                                                          </li>
+                                                          <li>
+                                                              <a href="ownerareaform.html">Connect owner and area</a>
+                                                          </li>
+                                                      </ul>
+
+
+                                                </li>
+
+                                            </ul>
+                                        </div>
+                                        <!-- /.sidebar-collapse -->
+                                    </div>
+        </nav>
+
+        <div id="page-wrapper">
+            <div class="row">
+                <div class="col-lg-12">
+                    <h1 class="page-header">Owners</h1>
+                </div>
+                <!-- /.col-lg-12 -->
+            </div>
+            <!-- /.row -->
+            <div class="row">
+                <div class="col-lg-12">
+                    <div class="panel panel-default">
+
+                        <!-- /.panel-heading -->
+                        <div class="panel-body">
+                            <div class="dataTable_wrapper">
+
+                                <table class="table table-striped table-bordered table-hover" id="dataTables-example">
+                                    <thead>
+                                        <tr>
+                                            <th>Owner name</th>
+                                            <th>Gender</th>
+                                            <th>Birth Place</th>
+                                            <th>Birth Date</th>
+                                            <th>Address</th>
+                                            <th>Edit</th>
+                                            <th>Delete</th>
+
+                                        </tr>
+                                    </thead>
+                                    <tbody>
+                                    </tbody>
+                                </table>
+                            </div>
+                            <!-- /.table-responsive -->
+    </div>
+    <!-- /#wrapper -->
+
+    <!-- jQuery -->
+    <script src="../bower_components/jquery/dist/jquery.min.js"></script>
+
+    <!-- Bootstrap Core JavaScript -->
+    <script src="../bower_components/bootstrap/dist/js/bootstrap.min.js"></script>
+
+    <!-- Metis Menu Plugin JavaScript -->
+    <script src="../bower_components/metisMenu/dist/metisMenu.min.js"></script>
+
+    <!-- DataTables JavaScript -->
+    <script src="../bower_components/datatables/media/js/jquery.dataTables.min.js"></script>
+    <script src="../bower_components/datatables-plugins/integration/bootstrap/3/dataTables.bootstrap.min.js"></script>
+
+    <!-- Custom Theme JavaScript -->
+    <script src="../dist/js/sb-admin-2.js"></script>
+
+    <!-- Page-Level Demo Scripts - Tables - Use for reference -->
+    <script>
+
+    const OWNERS_URL = 'http://localhost:8080/owner';
+
+    var table = $('#dataTables-example').DataTable({
+            responsive: true
+
+    });
+
+    $(document).ready(function() {
+
+
+        $.ajax({
+				      type: 'GET',
+			        url: OWNERS_URL,
+      				success: function(data) {
+                          fillTable(data);
+      				},
+              error: function(err) {
+      					         console.log(JSON.stringify(err));
+      				}
+        });
+
+    });
+
+    function fillTable(ownersList) {
+
+        for(index = 0; index < ownersList.length; index++) {
+           table.row.add(
+             [ ownersList[index].name,
+             (ownersList[index].male) ? "male" : "female",
+             ownersList[index].birthPlace,
+             ownersList[index].birthDate,
+             ownersList[index].address,
+             '<button type="button" class="btn btn-outline btn-success" onclick="toEditOwner('+ ownersList[index].id +');">Edit</button>',
+             '<button type="button" ' + ' data-id="' + ownersList[index].id +
+             '" class="btn btn-outline btn-danger" onclick="deleteOwner(' + ownersList[index].id + ');">Delete</button>' ]
+           ).id(index);
+         }
+
+         table.draw();
+    }
+
+    function deleteOwner(id) {
+
+      $.ajax({
+          type: 'DELETE',
+          url: OWNERS_URL + '/' + id,
+          success: function() {
+
+            table.row(findRowIndexByOwner(id)).remove();
+            table.draw();
+          },
+          error: function(err) {
+                 console.log(JSON.stringify(err));
+          }
+      });
+    }
+
+    function toEditOwner(id) {
+
+        var rowToEdit = table.row(findRowIndexByOwner(id));
+
+        var rowData = rowToEdit.data();
+
+        rowData[0] = '<input type="text" class="form-control in_table" style="width: 120px;" id="name' + id + '" value="' + rowData[0] + '"/>';
+
+        var oldGender = rowData[1];
+        rowData[1] =  '<div><label class="radio-inline">' +
+                        '<input type="radio" name="gender' + id + '" value="male" id="maleRadioButton' + id + '" >male' +
+                      '</label></div>' +
+                      '<label class="radio-inline">' +
+                          '<input type="radio" name="gender' + id + '" value="female" id="femaleRadioButton' + id + '">female' +
+                      '</label>';
+
+        rowData[2] = '<input type="text" class="form-control in_table" style="width: 120px;" id="birthPlace' + id + '" value="' + (rowData[2] || '') + '"/>';
+        rowData[3] = '<input type="date" class="form-control in_table" style="width: 120px;" id="birthDate' + id + '" value="' + (rowData[3] || '') + '"/>';
+        rowData[4] = '<input type="text" class="form-control in_table" style="width: 120px;" id="address' + id + '" value="' + (rowData[4] || '') + '"/>';
+        rowData[5] = '<button type="button" class="btn btn-outline btn-warning" onclick=confirmEdition(' + id + ');>Confirm</button>';
+
+        rowToEdit.data(rowData);
+
+        if(oldGender === "male")
+          $("#maleRadioButton" + id).prop("checked", true)
+        else
+          $("#femaleRadioButton" + id).prop("checked", true)
+
+    }
+
+    function confirmEdition(id) {
+
+        var gender = ($("input[type='radio'][name='gender" + id + "']:checked").val() === "male") ? true : false;
+        var newData = { "name": $("#name" + id).val(),
+                        "male": gender,
+                        "birthPlace": $("#birthPlace" + id).val(),
+                        "birthDate": $("#birthDate" + id).val(),
+                        "address": $("#address" + id).val()};
+
+        $.ajax({
+            type: 'PUT',
+            crossDomain: true,
+            url: OWNERS_URL + '/' + id,
+            contentType: "application/json",
+            dataType: 'json',
+            data: JSON.stringify(newData),
+            success: function(res) {
+
+              var rowToEdit = table.row(findRowIndexByOwner(id));
+              var rowData = rowToEdit.data();
+
+              rowData[0] = newData.name;
+              rowData[1] = (newData.male) ? "male" : "female";
+              rowData[2] = newData.birthPlace;
+              rowData[3] = newData.birthDate;
+              rowData[4] = newData.address;
+              rowData[5] = '<button type="button" class="btn btn-outline btn-success" onclick="toEditOwner('+ id +');">Edit</button>';
+
+              rowToEdit.data(rowData).draw();
+            },
+            error: function(jqXHR, textStatus, errorThrown) {
+                alert("Error! Status code: " + jqXHR.status + ". Please, specify owner's name.");
+            }
+        });
+
+    }
+
+    function findRowIndexByOwner(ownerId) {
+
+      var res;
+      table.rows().every(function() {
+          if($(this.data()[6]).attr('data-id') == ownerId) {
+              res = this.index();
+
+              // return from 'every()' function
+              return false;
+          }
+      });
+
+      return res;
+    }
+
+    </script>
+
+</body>
+
+</html>
