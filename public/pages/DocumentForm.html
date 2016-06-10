@@ -9,7 +9,7 @@
     <meta name="description" content="">
     <meta name="author" content="">
 
-    <title> Add owner</title>
+    <title>Connect area with owner</title>
 
     <!-- Bootstrap Core CSS -->
     <link href="../bower_components/bootstrap/dist/css/bootstrap.min.css" rel="stylesheet">
@@ -35,25 +35,28 @@
 <body>
 
     <div id="wrapper">
-      <!-- Navigation -->
-      <nav class="navbar navbar-default navbar-static-top" role="navigation" style="margin-bottom: 0">
-          <div class="navbar-header">
-              <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
-                  <span class="sr-only">Toggle navigation</span>
-                  <span class="icon-bar"></span>
-                  <span class="icon-bar"></span>
-                  <span class="icon-bar"></span>
-              </button>
-              <a class="navbar-brand" href="index.html">Land Cadastre</a>
-          </div>
 
-      <ul class="nav navbar-top-links navbar-right">
-          <!-- /.dropdown -->
-          <li class="dropdown">
-              <!-- /.dropdown-user -->
-          </li>
-          <!-- /.dropdown -->
-      </ul>
+        <!-- Navigation -->
+        <nav class="navbar navbar-default navbar-static-top" role="navigation" style="margin-bottom: 0">
+            <div class="navbar-header">
+                <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
+                    <span class="sr-only">Toggle navigation</span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                </button>
+                <a class="navbar-brand" href="index.html">Land Cadastre</a>
+            </div>
+            <!-- /.navbar-header -->
+
+                <!-- /.dropdown -->
+                <ul class="nav navbar-top-links navbar-right">
+                    <!-- /.dropdown -->
+                    <li class="dropdown">
+                        <!-- /.dropdown-user -->
+                    </li>
+                    <!-- /.dropdown -->
+            </ul>
             <!-- /.navbar-top-links -->
 
                                     <div class="navbar-default sidebar" role="navigation">
@@ -107,7 +110,6 @@
                                                           </li>
                                                       </ul>
 
-
                                                 </li>
 
                                             </ul>
@@ -115,12 +117,10 @@
                                         <!-- /.sidebar-collapse -->
                                     </div>
         </nav>
-
-
         <div id="page-wrapper">
           <div class="row">
               <div class="col-lg-12">
-                  <h1 class="page-header">Owner</h1>
+                  <h1 class="page-header">Document</h1>
                   <h4 id="info"></h4>
               </div>
               <!-- /.col-lg-12 -->
@@ -128,32 +128,24 @@
           <div class="row">
               <div class="col-lg-4">
                   <div class="form-group">
-                      <label>Name</label>
-                      <input class="form-control" type="text" id="name">
+                      <label>Owner</label>
+                      <select id="owner" class="form-control"></select>
                   </div>
                   <div class="form-group">
-                      <label>Gender</label>
-                      <label class="radio-inline">
-                          <input type="radio" name="gender" id="optionsRadiosInline1" value="male" checked>male
-                      </label>
-                      <label class="radio-inline">
-                          <input type="radio" name="gender" id="optionsRadiosInline2" value="female">female
-                      </label>
+                      <label>Statement</label>
+                      <input id="statement" type="number" class="form-control">
                   </div>
                   <div class="form-group">
-                      <label>Birth date</label>
-                      <input class="form-control" type="date" id="birthDate" />
+                      <label>Date</label>
+                      <input id="date" type="date" class="form-control">
                   </div>
                   <div class="form-group">
-                      <label>Birth place</label>
-                      <input class="form-control" type="text" id="birthPlace">
-                  </div>
-                  <div class="form-group">
-                      <label>Address</label>
-                      <input class="form-control" type="text" id="address">
+                      <label>Enterprice</label>
+                      <input id="enterprise" class="form-control">
                   </div>
 
-                  <div>  <br> <button type="button" class="btn btn-outline btn-primary" onclick="addOwner();">Add</button>
+
+                  <div>  <br> <button type="button" class="btn btn-outline btn-primary" onclick="addDocument();">Add</button>
                   </div>
                 </div>
                 <!-- /.col-lg-12 -->
@@ -179,27 +171,53 @@
 
     <script>
 
+        const DOCUMENTS_URL = 'http://localhost:8080/document';
         const OWNERS_URL = 'http://localhost:8080/owner';
 
-        function addOwner() {
+        $(document).ready(function() {
 
-          var gender = ($("input[type='radio'][name='gender']:checked").val() === "male") ? true : false;
-          var ownerData = { "name": $("#name").val(),
-                            "male": gender,
-                            "birthPlace": $("#birthPlace").val(),
-                            "birthDate": $("#birthDate").val(),
-                            "address": $("#address").val()};
+            loadOwners();
+
+        });
+
+        function loadOwners() {
+          $.ajax({
+                type: 'GET',
+                url: OWNERS_URL,
+                success: function(owners) {
+
+                            for(var i = 0; i < owners.length; i++) {
+
+                              $('#owner').append($('<option>', {
+                                  value: owners[i].id,
+                                  text: owners[i].name
+                              }));
+                            }
+                },
+                error: function(err) {
+                           console.log(JSON.stringify(err));
+                }
+          });
+        }
+
+        function addDocument() {
+
+            var documentData = { "owner_id": parseInt($("#owner option:selected").val(), 10),
+                                  "statement": $("#statement").val(),
+                                  "date": $("#date").val(),
+                                  "enterprise": $("#enterprise").val()};
+
 
             $.ajax({
                 type: 'POST',
                 crossDomain: true,
-                url: OWNERS_URL,
+                url: DOCUMENTS_URL,
                 contentType: "application/json",
                 dataType: 'json',
-                data: JSON.stringify(ownerData),
+                data: JSON.stringify(documentData),
                 success: function() {
 
-                  $("#info").text('Owner "' + ownerData.name + '" successfully added!');
+                  $("#info").text('Document successfully added!');
 
                 },
                 error: function(jqXHR, textStatus, errorThrown) {

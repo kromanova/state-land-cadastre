@@ -9,7 +9,7 @@
     <meta name="description" content="">
     <meta name="author" content="">
 
-    <title>Connect area with owner</title>
+    <title> Add registrar</title>
 
     <!-- Bootstrap Core CSS -->
     <link href="../bower_components/bootstrap/dist/css/bootstrap.min.css" rel="stylesheet">
@@ -35,35 +35,25 @@
 <body>
 
     <div id="wrapper">
+      <!-- Navigation -->
+      <nav class="navbar navbar-default navbar-static-top" role="navigation" style="margin-bottom: 0">
+          <div class="navbar-header">
+              <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
+                  <span class="sr-only">Toggle navigation</span>
+                  <span class="icon-bar"></span>
+                  <span class="icon-bar"></span>
+                  <span class="icon-bar"></span>
+              </button>
+              <a class="navbar-brand" href="index.html">Land Cadastre</a>
+          </div>
 
-        <!-- Navigation -->
-        <nav class="navbar navbar-default navbar-static-top" role="navigation" style="margin-bottom: 0">
-            <div class="navbar-header">
-                <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
-                    <span class="sr-only">Toggle navigation</span>
-                    <span class="icon-bar"></span>
-                    <span class="icon-bar"></span>
-                    <span class="icon-bar"></span>
-                </button>
-                <a class="navbar-brand" href="index.html">Land Cadastre</a>
-            </div>
-            <!-- /.navbar-header -->
-
-                <!-- /.dropdown -->
-                <ul class="nav navbar-top-links navbar-right">
-                    <!-- /.dropdown -->
-                    <li class="dropdown">
-                        <a class="dropdown-toggle" data-toggle="dropdown" href="#">
-                            <i class="fa fa-user fa-fw"></i>  <i class="fa fa-caret-down"></i>
-                        </a>
-                        <ul class="dropdown-menu dropdown-user">
-                            <li><a href="login.html"><i class="fa fa-sign-out fa-fw"></i> Logout</a>
-                            </li>
-                        </ul>
-                        <!-- /.dropdown-user -->
-                    </li>
-                    <!-- /.dropdown -->
-            </ul>
+      <ul class="nav navbar-top-links navbar-right">
+          <!-- /.dropdown -->
+          <li class="dropdown">
+              <!-- /.dropdown-user -->
+          </li>
+          <!-- /.dropdown -->
+      </ul>
             <!-- /.navbar-top-links -->
 
                                     <div class="navbar-default sidebar" role="navigation">
@@ -88,10 +78,13 @@
                                                             <a href="Owners.html">Owners</a>
                                                         </li>
                                                         <li>
-                                                            <a href="Area.html">Area</a>
+                                                            <a href="Registrars.html">Registrars</a>
                                                         </li>
                                                         <li>
-                                                            <a href="OwnerArea.html">Owners and area</a>
+                                                            <a href="Documents.html">Documents</a>
+                                                        </li>
+                                                        <li>
+                                                            <a href="Area.html">Areas</a>
                                                         </li>
                                                     </ul>
                                                     <!-- /.nav-second-level -->
@@ -104,10 +97,13 @@
                                                               <a href="ownerform.html">Owner</a>
                                                           </li>
                                                           <li>
-                                                              <a href="areaform.html">Area</a>
+                                                              <a href="registrarform.html">Registrar</a>
                                                           </li>
                                                           <li>
-                                                              <a href="ownerareaform.html">Connect owner and area</a>
+                                                              <a href="DocumentForm.html">Document</a>
+                                                          </li>
+                                                          <li>
+                                                              <a href="areaform.html">Area</a>
                                                           </li>
                                                       </ul>
 
@@ -119,34 +115,28 @@
                                         <!-- /.sidebar-collapse -->
                                     </div>
         </nav>
+
+
         <div id="page-wrapper">
           <div class="row">
               <div class="col-lg-12">
-                  <h1 class="page-header">Connect area with owner</h1>
+                  <h1 class="page-header">Registrar</h1>
+                  <h4 id="info"></h4>
               </div>
               <!-- /.col-lg-12 -->
           </div>
           <div class="row">
               <div class="col-lg-4">
                   <div class="form-group">
-                      <label>Area</label>
-                      <input class="form-control">
+                      <label>Name</label>
+                      <input class="form-control" type="text" id="name">
                   </div>
                   <div class="form-group">
-                      <label>Owner</label>
-                      <input class="form-control">
-                  </div>
-                  <div class="form-group">
-                      <label>Enterprice</label>
-                      <input class="form-control">
-                  </div>
-                  <div class="form-group">
-                      <label>Statement</label>
-                      <input type="file">
+                      <label>Certificate</label>
+                      <input class="form-control" type="text" id="certificate">
                   </div>
 
-                  <div>  <br> <button type="button" class="btn btn-outline btn-primary">Add</button>
-                  <button type="button" class="btn btn-outline btn-primary">Update</button></div>
+                  <div>  <br> <button type="button" class="btn btn-outline btn-primary" onclick="addRegistrar();">Add</button>
                   </div>
                 </div>
                 <!-- /.col-lg-12 -->
@@ -169,6 +159,36 @@
 
     <!-- Custom Theme JavaScript -->
     <script src="../dist/js/sb-admin-2.js"></script>
+
+    <script>
+
+        const REGISTRARS_URL = 'http://localhost:8080/registrar';
+
+        function addRegistrar() {
+
+          var registrarData = { "name": $("#name").val(),
+                            "certificate": $("#certificate").val()};
+
+            $.ajax({
+                type: 'POST',
+                crossDomain: true,
+                url: REGISTRARS_URL,
+                contentType: "application/json",
+                dataType: 'json',
+                data: JSON.stringify(registrarData),
+                success: function() {
+
+                  $("#info").text('Registrar "' + registrarData.name + '" successfully added!');
+
+                },
+                error: function(jqXHR, textStatus, errorThrown) {
+                    alert("Error! " + JSON.parse(jqXHR.responseText).message);
+                }
+            });
+
+        }
+
+    </script>
 
 </body>
 

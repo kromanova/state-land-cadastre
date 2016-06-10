@@ -47,13 +47,6 @@
             <ul class="nav navbar-top-links navbar-right">
                 <!-- /.dropdown -->
                 <li class="dropdown">
-                    <a class="dropdown-toggle" data-toggle="dropdown" href="#">
-                        <i class="fa fa-user fa-fw"></i>  <i class="fa fa-caret-down"></i>
-                    </a>
-                    <ul class="dropdown-menu dropdown-user">
-                        <li><a href="login.html"><i class="fa fa-sign-out fa-fw"></i> Logout</a>
-                        </li>
-                    </ul>
                     <!-- /.dropdown-user -->
                 </li>
                 <!-- /.dropdown -->
@@ -83,10 +76,13 @@
                                                             <a href="Owners.html">Owners</a>
                                                         </li>
                                                         <li>
-                                                            <a href="Area.html">Area</a>
+                                                            <a href="Registrars.html">Registrars</a>
                                                         </li>
                                                         <li>
-                                                            <a href="OwnerArea.html">Owners and area</a>
+                                                            <a href="Documents.html">Documents</a>
+                                                        </li>
+                                                        <li>
+                                                            <a href="Area.html">Areas</a>
                                                         </li>
                                                     </ul>
                                                     <!-- /.nav-second-level -->
@@ -99,10 +95,13 @@
                                                               <a href="ownerform.html">Owner</a>
                                                           </li>
                                                           <li>
-                                                              <a href="areaform.html">Area</a>
+                                                              <a href="registrarform.html">Registrar</a>
                                                           </li>
                                                           <li>
-                                                              <a href="ownerareaform.html">Connect owner and area</a>
+                                                              <a href="DocumentForm.html">Document</a>
+                                                          </li>
+                                                          <li>
+                                                              <a href="areaform.html">Area</a>
                                                           </li>
                                                       </ul>
 
@@ -118,7 +117,7 @@
         <div id="page-wrapper">
             <div class="row">
                 <div class="col-lg-12">
-                    <h1 class="page-header">Database</h1>
+                    <h1 class="page-header">Documents</h1>
                 </div>
                 <!-- /.col-lg-12 -->
             </div>
@@ -136,32 +135,15 @@
                                     <thead>
                                         <tr>
 
-                                            <th>Owner name</th>
-                                            <th>Area id</th>
-                                            <th>Statement No</th>
+                                            <th>Owner</th>
+                                            <th>Statement</th>
+                                            <th>Date</th>
                                             <th>Enterprise</th>
                                             <th>Edit</th>
                                             <th>Delete</th>
                                         </tr>
                                     </thead>
                                     <tbody>
-                                        <tr class="gradeX">
-
-                                            <td>Link to owner</td>
-                                            <td>Link to area</td>
-                                            <td class="center">-</td>
-                                            <td class="center">X</td>
-                                            <td> <a href="ownerAreaForm.html" class="btn btn-outline btn-success">Edit</a> </td>
-                                            <td>  <button type="button" class="btn btn-outline btn-danger">Delete</button> </td>
-                                        </tr>
-                                        <tr class="gradeC">
-                                            <td>Link to owner</td>
-                                            <td>Link to area</td>
-                                            <td class="center">-</td>
-                                            <td class="center">C</td>
-                                            <td> <a href="ownerAreaForm.html" class="btn btn-outline btn-success">Edit</a> </td>
-                                            <td>  <button type="button" class="btn btn-outline btn-danger">Delete</button> </td>
-                                        </tr>
                                     </tbody>
                                 </table>
                             </div>
@@ -187,11 +169,183 @@
 
     <!-- Page-Level Demo Scripts - Tables - Use for reference -->
     <script>
-    $(document).ready(function() {
-        $('#dataTables-example').DataTable({
+
+        const DOCUMENTS_URL = 'http://localhost:8080/document';
+        const OWNERS_URL = 'http://localhost:8080/owner';
+
+        var table = $('#dataTables-example').DataTable({
                 responsive: true
+
         });
-    });
+
+        var onwers;
+
+        $(document).ready(function() {
+
+            loadOwnersAndDocuments();
+
+        });
+
+        function loadOwnersAndDocuments() {
+
+          $.ajax({
+                type: 'GET',
+                url: OWNERS_URL,
+                success: function(ownersList) {
+                            owners = ownersList;
+                },
+                error: function(err) {
+                           console.log(JSON.stringify(err));
+                },
+                complete: function (data) {
+                            loadDocuments();
+                }
+          });
+        }
+
+        function loadDocuments() {
+            $.ajax({
+                  type: 'GET',
+                  url: DOCUMENTS_URL,
+                  success: function(documentsList) {
+
+                                fillTable(documentsList);
+                  },
+                  error: function(err) {
+                             console.log(JSON.stringify(err));
+                  }
+            });
+        }
+
+        function fillTable(documentsList, ownersList) {
+
+            for(index = 0; index < documentsList.length; index++) {
+
+               var ownerName = getOwnerNameByID(documentsList[index].owner_id);
+               table.row.add(
+                 [
+                    ownerName,
+                    documentsList[index].statement,
+                    documentsList[index].date,
+                    documentsList[index].enterprise,
+                   '<button type="button" class="btn btn-outline btn-success" onclick="toEditDocument('+ documentsList[index].id +');">Edit</button>',
+                   '<button type="button" ' + ' data-id="' + documentsList[index].id + '" data-ownerid="' + documentsList[index].owner_id +
+                   '" class="btn btn-outline btn-danger" onclick="deleteDocument(' + documentsList[index].id + ');">Delete</button>' ]
+               ).id(index);
+             }
+
+             table.draw();
+        }
+
+
+
+        function getOwnerNameByID(ownerId) {
+
+            var name = '';
+            for(i = 0; i < owners.length; i++) {
+              if(owners[i].id === ownerId) {
+                name = owners[i].name;
+                break;
+              }
+            }
+
+            return name;
+        }
+
+        function deleteDocument(id) {
+
+          $.ajax({
+              type: 'DELETE',
+              url: DOCUMENTS_URL + '/' + id,
+              success: function() {
+
+                table.row(findRowIndexByDocument(id)).remove();
+                table.draw();
+              },
+              error: function(err) {
+                     console.log(JSON.stringify(err));
+              }
+          });
+        }
+
+        function toEditDocument(id) {
+
+            var rowToEdit = table.row(findRowIndexByDocument(id));
+
+            var rowData = rowToEdit.data();
+
+            rowData[0] = '<select class="form-control" style="width: 120px;" id="owner' + id + '" >';
+            for(i = 0; i < owners.length; i++) {
+
+                rowData[0] += ($(rowData[5]).attr('data-ownerid') == owners[i].id)  ? '<option value="' + owners[i].id + '" selected>' + owners[i].name + '</option>'
+                                                                                    : '<option value="' + owners[i].id + '" >' + owners[i].name + '</option>';
+
+            }
+            rowData[0] += '</select>';
+
+            rowData[1] = '<input type="number" class="form-control" style="width: 120px;" id="statement' + id + '" value="' + (rowData[1] || '') + '"/>';
+            rowData[2] = '<input type="date" class="form-control" style="width: 120px;" id="date' + id + '" value="' + (rowData[2] || '') + '"/>';
+            rowData[3] = '<input type="text" class="form-control " style="width: 120px;" id="enterprise' + id + '" value="' + (rowData[3] || '') + '"/>';
+
+            rowData[4] = '<button type="button" class="btn btn-outline btn-warning" onclick=confirmEdition(' + id + ');>Confirm</button>';
+
+            rowToEdit.data(rowData);
+
+
+        }
+
+        function confirmEdition(id) {
+
+            var newOwnerId = parseInt($("#owner" + id + " option:selected").val(), 10);
+            var newOwnerName = $("#owner" + id + " option:selected").text();
+            console.log("newOwnerId: " + newOwnerId);
+            var newData = { "owner_id": newOwnerId,
+                            "statement": $("#statement" + id).val(),
+                            "date": $("#date" + id).val(),
+                            "enterprise": $("#enterprise" + id).val()};
+
+            $.ajax({
+                type: 'PUT',
+                crossDomain: true,
+                url: DOCUMENTS_URL + '/' + id,
+                contentType: "application/json",
+                dataType: 'json',
+                data: JSON.stringify(newData),
+                success: function(res) {
+
+                  var rowToEdit = table.row(findRowIndexByDocument(id));
+                  var rowData = rowToEdit.data();
+
+                  rowData[0] = newOwnerName;
+                  rowData[1] = newData.statement;
+                  rowData[2] = newData.date;
+                  rowData[3] = newData.enterprise;
+                  rowData[4] = '<button type="button" class="btn btn-outline btn-success" onclick="toEditDocument('+ id +');">Edit</button>';
+
+                  rowToEdit.data(rowData).draw();
+                },
+                error: function(jqXHR, textStatus, errorThrown) {
+                  alert("Error! " + JSON.parse(jqXHR.responseText).message);
+                }
+            });
+
+        }
+
+        function findRowIndexByDocument(documentId) {
+
+          var res;
+          table.rows().every(function() {
+              if($(this.data()[5]).attr('data-id') == documentId) {
+                  res = this.index();
+
+                  // return from 'every()' function
+                  return false;
+              }
+          });
+
+          return res;
+        }
+
     </script>
 
 </body>
