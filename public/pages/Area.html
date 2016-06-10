@@ -134,13 +134,13 @@
                                 <table class="table table-striped table-bordered table-hover" id="dataTables-example">
                                     <thead>
                                         <tr>
-                                          <th>Area id code</th>
+                                            <th>Owner</th>
+                                            <th>Registrar</th>
                                             <th>Type</th>
                                             <th>Space</th>
                                             <th>Coordinates</th>
                                             <th>Cost</th>
-                                            <th>Owner</th>
-                                            <th>Registrar</th>
+
 
                                             <th>Edit</th>
                                             <th>Delete</th>
@@ -171,11 +171,235 @@
 
     <!-- Page-Level Demo Scripts - Tables - Use for reference -->
     <script>
-    $(document).ready(function() {
-        $('#dataTables-example').DataTable({
+
+        const AREAS_URL = 'http://localhost:8080/area';
+        const OWNERS_URL = 'http://localhost:8080/owner';
+        const REGISTRARS_URL = 'http://localhost:8080/registrar';
+
+        var table = $('#dataTables-example').DataTable({
                 responsive: true
+
         });
-    });
+
+        var onwers;
+        var registrars;
+
+        $(document).ready(function() {
+
+            loadOwnersRegistrarsAreas();
+
+        });
+
+        function loadOwnersRegistrarsAreas() {
+
+          $.ajax({
+                type: 'GET',
+                url: OWNERS_URL,
+                success: function(ownersList) {
+                            owners = ownersList;
+                },
+                error: function(err) {
+                           console.log(JSON.stringify(err));
+                },
+                complete: function (data) {
+                            loadRegistrars();
+                }
+          });
+        }
+
+        function loadRegistrars() {
+          $.ajax({
+                type: 'GET',
+                url: REGISTRARS_URL,
+                success: function(registrarsList) {
+                            registrars = registrarsList;
+                },
+                error: function(err) {
+                           console.log(JSON.stringify(err));
+                },
+                complete: function (data) {
+                            loadAreas();
+                }
+          });
+        }
+
+        function loadAreas() {
+            $.ajax({
+                  type: 'GET',
+                  url: AREAS_URL,
+                  success: function(areasList) {
+
+                                fillTable(areasList);
+                  },
+                  error: function(err) {
+                             console.log(JSON.stringify(err));
+                  }
+            });
+        }
+
+        function fillTable(areasList) {
+
+            for(index = 0; index < areasList.length; index++) {
+
+               var ownerName = getOwnerNameByID(areasList[index].owner_id);
+               var registrarName = getRegistrarNameByID(areasList[index].registrar_id);
+               table.row.add(
+                 [
+                    ownerName,
+                    registrarName,
+                    areasList[index].type,
+                    areasList[index].space,
+                    areasList[index].coordinates,
+                    areasList[index].cost,
+                   '<button type="button" class="btn btn-outline btn-success" onclick="toEditArea('+ areasList[index].id +');">Edit</button>',
+                   '<button type="button" ' + ' data-id="' + areasList[index].id + '" data-ownerid="' + areasList[index].owner_id +
+                   '" data-registrarid="' + areasList[index].registrar_id +'" class="btn btn-outline btn-danger" onclick="deleteArea(' + areasList[index].id + ');">Delete</button>' ]
+               ).id(index);
+             }
+
+             table.draw();
+        }
+
+
+
+        function getOwnerNameByID(ownerId) {
+
+            var name = '';
+            for(i = 0; i < owners.length; i++) {
+              if(owners[i].id === ownerId) {
+                name = owners[i].name;
+                break;
+              }
+            }
+
+            return name;
+        }
+
+        function getRegistrarNameByID(registrarId) {
+
+            var name = '';
+            for(i = 0; i < registrars.length; i++) {
+              if(registrars[i].id === registrarId) {
+                name = registrars[i].name;
+                break;
+              }
+            }
+
+            return name;
+        }
+
+        function deleteArea(id) {
+
+          $.ajax({
+              type: 'DELETE',
+              url: AREAS_URL + '/' + id,
+              success: function() {
+
+                table.row(findRowIndexByArea(id)).remove();
+                table.draw();
+              },
+              error: function(err) {
+                     console.log(JSON.stringify(err));
+              }
+          });
+        }
+
+        function toEditArea(id) {
+
+            var rowToEdit = table.row(findRowIndexByArea(id));
+
+            var rowData = rowToEdit.data();
+
+            rowData[0] = '<select class="form-control" style="width: 100px;" id="owner' + id + '" >';
+            for(i = 0; i < owners.length; i++) {
+
+                rowData[0] += ($(rowData[7]).attr('data-ownerid') == owners[i].id)  ? '<option value="' + owners[i].id + '" selected>' + owners[i].name + '</option>'
+                                                                                    : '<option value="' + owners[i].id + '" >' + owners[i].name + '</option>';
+
+            }
+            rowData[0] += '</select>';
+
+            rowData[1] = '<select class="form-control" style="width: 100px;" id="registrar' + id + '" >';
+            for(i = 0; i < registrars.length; i++) {
+
+                rowData[1] += ($(rowData[7]).attr('data-registrarid') == registrars[i].id)  ? '<option value="' + registrars[i].id + '" selected>' + registrars[i].name + '</option>'
+                                                                                    : '<option value="' + registrars[i].id + '" >' + registrars[i].name + '</option>';
+
+            }
+            rowData[1] += '</select>';
+
+            rowData[2] = '<input type="text" class="form-control" style="width: 100px;" id="type' + id + '" value="' + (rowData[2] || '') + '"/>';
+            rowData[3] = '<input type="number" class="form-control" style="width: 100px;" id="space' + id + '" value="' + (rowData[3] || '') + '"/>';
+            rowData[4] = '<input type="text" class="form-control " style="width: 100px;" id="coordinates' + id + '" value="' + (rowData[4] || '') + '"/>';
+            rowData[5] = '<input type="number" class="form-control " style="width: 100px;" id="cost' + id + '" value="' + (rowData[5] || '') + '"/>';
+
+            rowData[6] = '<button type="button" class="btn btn-outline btn-warning" onclick=confirmEdition(' + id + ');>Confirm</button>';
+
+            rowToEdit.data(rowData);
+
+
+        }
+
+        function confirmEdition(id) {
+
+            var newOwnerId = parseInt($("#owner" + id + " option:selected").val(), 10);
+            var newOwnerName = $("#owner" + id + " option:selected").text();
+
+            var newRegistrarId = parseInt($("#registrar" + id + " option:selected").val(), 10);
+            var newRegistrarName = $("#registrar" + id + " option:selected").text();
+
+            var newData = { "owner_id": newOwnerId,
+                            "registrar_id": newRegistrarId,
+                            "type": $("#type" + id).val(),
+                            "space": $("#space" + id).val(),
+                            "coordinates": $("#coordinates" + id).val(),
+                            "cost": $("#cost" + id).val()};
+
+            $.ajax({
+                type: 'PUT',
+                crossDomain: true,
+                url: AREAS_URL + '/' + id,
+                contentType: "application/json",
+                dataType: 'json',
+                data: JSON.stringify(newData),
+                success: function(res) {
+
+                  var rowToEdit = table.row(findRowIndexByArea(id));
+                  var rowData = rowToEdit.data();
+
+                  rowData[0] = newOwnerName;
+                  rowData[1] = newRegistrarName;
+
+                  rowData[2] = newData.type;
+                  rowData[3] = newData.space;
+                  rowData[4] = newData.coordinates;
+                  rowData[5] = newData.cost;
+                  rowData[6] = '<button type="button" class="btn btn-outline btn-success" onclick="toEditArea('+ id +');">Edit</button>';
+
+                  rowToEdit.data(rowData).draw();
+                },
+                error: function(jqXHR, textStatus, errorThrown) {
+                  alert("Error! " + JSON.parse(jqXHR.responseText).message);
+                }
+            });
+
+        }
+
+        function findRowIndexByArea(documentId) {
+
+          var res;
+          table.rows().every(function() {
+              if($(this.data()[7]).attr('data-id') == documentId) {
+                  res = this.index();
+
+                  // return from 'every()' function
+                  return false;
+              }
+          });
+
+          return res;
+        }
+
     </script>
 
 </body>

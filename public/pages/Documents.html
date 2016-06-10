@@ -217,7 +217,7 @@
             });
         }
 
-        function fillTable(documentsList, ownersList) {
+        function fillTable(documentsList) {
 
             for(index = 0; index < documentsList.length; index++) {
 
@@ -298,7 +298,6 @@
 
             var newOwnerId = parseInt($("#owner" + id + " option:selected").val(), 10);
             var newOwnerName = $("#owner" + id + " option:selected").text();
-            console.log("newOwnerId: " + newOwnerId);
             var newData = { "owner_id": newOwnerId,
                             "statement": $("#statement" + id).val(),
                             "date": $("#date" + id).val(),

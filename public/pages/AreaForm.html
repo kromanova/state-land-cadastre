@@ -124,6 +124,7 @@
             <div class="row">
                 <div class="col-lg-12">
                     <h1 class="page-header">Area</h1>
+                    <h4 id="info"></h4>
                 </div>
                 <!-- /.col-lg-12 -->
             </div>
@@ -131,32 +132,30 @@
             <div class="row">
                 <div class="col-lg-4">
                     <div class="form-group">
+                        <label>Owner</label>
+                        <select class="form-control" id="owner"></select>
+                    </div>
+                    <div class="form-group">
+                        <label>Registrar</label>
+                        <select class="form-control" id="registrar"></select>
+                    </div>
+                    <div class="form-group">
                         <label>Type</label>
-                          <select class="form-control">
-                              <option>1</option>
-                              <option>2</option>
-                              <option>3</option>
-                              <option>4</option>
-                              <option>5</option>
-                          </select>
+                          <input type="text" class="form-control" id="type">
                     </div>
                     <div class="form-group">
                         <label>Space</label>
-                        <input class="form-control">
+                        <input type="number" class="form-control" id="space">
                     </div>
                     <div class="form-group">
                         <label>Coordinates</label>
-                        <input class="form-control">
+                        <input type="text" class="form-control" id="coordinates">
                     </div>
                     <div class="form-group">
                         <label>Cost</label>
-                        <input class="form-control">
+                        <input type="number" class="form-control" id="cost">
                     </div>
-                    <div class="form-group">
-                        <label>Owner id</label>
-                        <input class="form-control">
-                    </div>
-                    <div>  <br> <button type="button" class="btn btn-outline btn-primary">Add</button>
+                    <div>  <br> <button type="button" class="btn btn-outline btn-primary" onclick="addArea();">Add</button>
                   </div>
                   <!-- /.col-lg-12 -->
               </div>
@@ -181,6 +180,91 @@
 
     <!-- Custom Theme JavaScript -->
     <script src="../dist/js/sb-admin-2.js"></script>
+
+
+    <script>
+
+        const AREAS_URL = 'http://localhost:8080/area';
+        const OWNERS_URL = 'http://localhost:8080/owner';
+        const REGISTRARS_URL = 'http://localhost:8080/registrar';
+
+        $(document).ready(function() {
+
+            loadOwners();
+            loadRegistrars();
+
+        });
+
+        function loadOwners() {
+          $.ajax({
+                type: 'GET',
+                url: OWNERS_URL,
+                success: function(owners) {
+
+                            for(var i = 0; i < owners.length; i++) {
+
+                              $('#owner').append($('<option>', {
+                                  value: owners[i].id,
+                                  text: owners[i].name
+                              }));
+                            }
+                },
+                error: function(err) {
+                           console.log(JSON.stringify(err));
+                }
+          });
+        }
+
+        function loadRegistrars() {
+          $.ajax({
+                type: 'GET',
+                url: REGISTRARS_URL,
+                success: function(registrars) {
+
+                            for(var i = 0; i < registrars.length; i++) {
+
+                              $('#registrar').append($('<option>', {
+                                  value: registrars[i].id,
+                                  text: registrars[i].name
+                              }));
+                            }
+                },
+                error: function(err) {
+                           console.log(JSON.stringify(err));
+                }
+          });
+        }
+
+        function addArea() {
+
+            var areaData = {  "owner_id": parseInt($("#owner option:selected").val(), 10),
+                              "registrar_id": parseInt($("#registrar option:selected").val(), 10),
+                              "type": $("#type").val(),
+                              "space": $("#space").val(),
+                              "coordinates": $("#coordinates").val(),
+                              "cost": $("#cost").val()};
+
+
+            $.ajax({
+                type: 'POST',
+                crossDomain: true,
+                url: AREAS_URL,
+                contentType: "application/json",
+                dataType: 'json',
+                data: JSON.stringify(areaData),
+                success: function() {
+
+                  $("#info").text('Area successfully added!');
+
+                },
+                error: function(jqXHR, textStatus, errorThrown) {
+                    alert("Error! " + JSON.parse(jqXHR.responseText).message);
+                }
+            });
+
+        }
+
+    </script>
 
 </body>
 
