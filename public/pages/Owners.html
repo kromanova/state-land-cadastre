@@ -266,7 +266,7 @@
         var newData = { "name": $("#name" + id).val(),
                         "male": gender,
                         "birthPlace": $("#birthPlace" + id).val(),
-                        "birthDate": $("#birthDate" + id).val(),
+                        "birthDate": $("#birthDate" + id).val()  || '0000-00-00',
                         "address": $("#address" + id).val()};
 
         $.ajax({

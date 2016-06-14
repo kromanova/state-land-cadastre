@@ -207,7 +207,7 @@
                             for(var i = 0; i < owners.length; i++) {
 
                               $('#owner').append($('<option>', {
-                                  value: owners[i].id,
+                                  value: owners[i]._key,
                                   text: owners[i].name
                               }));
                             }
@@ -227,7 +227,7 @@
                             for(var i = 0; i < registrars.length; i++) {
 
                               $('#registrar').append($('<option>', {
-                                  value: registrars[i].id,
+                                  value: registrars[i]._key,
                                   text: registrars[i].name
                               }));
                             }

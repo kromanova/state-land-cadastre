@@ -222,15 +222,16 @@
             for(index = 0; index < documentsList.length; index++) {
 
                var ownerName = getOwnerNameByID(documentsList[index].owner_id);
+               console.log(ownerName);
                table.row.add(
                  [
                     ownerName,
                     documentsList[index].statement,
                     documentsList[index].date.substring(0, 10),
                     documentsList[index].enterprise,
-                   '<button type="button" class="btn btn-outline btn-success" onclick="toEditDocument('+ documentsList[index].id +');">Edit</button>',
-                   '<button type="button" ' + ' data-id="' + documentsList[index].id + '" data-ownerid="' + documentsList[index].owner_id +
-                   '" class="btn btn-outline btn-danger" onclick="deleteDocument(' + documentsList[index].id + ');">Delete</button>' ]
+                   '<button type="button" class="btn btn-outline btn-success" onclick="toEditDocument('+ documentsList[index]._key +');">Edit</button>',
+                   '<button type="button" ' + ' data-id="' + documentsList[index]._key + '" data-ownerid="' + documentsList[index].owner_id +
+                   '" class="btn btn-outline btn-danger" onclick="deleteDocument(' + documentsList[index]._key + ');">Delete</button>' ]
                ).id(index);
              }
 
@@ -243,7 +244,7 @@
 
             var name = '';
             for(i = 0; i < owners.length; i++) {
-              if(owners[i].id === ownerId) {
+              if(owners[i]._key == ownerId) {
                 name = owners[i].name;
                 break;
               }
@@ -277,8 +278,8 @@
             rowData[0] = '<select class="form-control" style="width: 120px;" id="owner' + id + '" >';
             for(i = 0; i < owners.length; i++) {
 
-                rowData[0] += ($(rowData[5]).attr('data-ownerid') == owners[i].id)  ? '<option value="' + owners[i].id + '" selected>' + owners[i].name + '</option>'
-                                                                                    : '<option value="' + owners[i].id + '" >' + owners[i].name + '</option>';
+                rowData[0] += ($(rowData[5]).attr('data-ownerid') == owners[i]._key)  ? '<option value="' + owners[i]._key + '" selected>' + owners[i].name + '</option>'
+                                                                                    : '<option value="' + owners[i]._key + '" >' + owners[i].name + '</option>';
 
             }
             rowData[0] += '</select>';
@@ -300,7 +301,7 @@
             var newOwnerName = $("#owner" + id + " option:selected").text();
             var newData = { "owner_id": newOwnerId,
                             "statement": $("#statement" + id).val(),
-                            "date": $("#date" + id).val(),
+                            "date": $("#date" + id).val() || '0000-00-00',
                             "enterprise": $("#enterprise" + id).val()};
 
             $.ajax({

@@ -253,9 +253,9 @@
                     areasList[index].space,
                     areasList[index].coordinates,
                     areasList[index].cost,
-                   '<button type="button" class="btn btn-outline btn-success" onclick="toEditArea('+ areasList[index].id +');">Edit</button>',
-                   '<button type="button" ' + ' data-id="' + areasList[index].id + '" data-ownerid="' + areasList[index].owner_id +
-                   '" data-registrarid="' + areasList[index].registrar_id +'" class="btn btn-outline btn-danger" onclick="deleteArea(' + areasList[index].id + ');">Delete</button>' ]
+                   '<button type="button" class="btn btn-outline btn-success" onclick="toEditArea('+ areasList[index]._key +');">Edit</button>',
+                   '<button type="button" ' + ' data-id="' + areasList[index]._key + '" data-ownerid="' + areasList[index].owner_id +
+                   '" data-registrarid="' + areasList[index].registrar_id +'" class="btn btn-outline btn-danger" onclick="deleteArea(' + areasList[index]._key + ');">Delete</button>' ]
                ).id(index);
              }
 
@@ -268,7 +268,7 @@
 
             var name = '';
             for(i = 0; i < owners.length; i++) {
-              if(owners[i].id === ownerId) {
+              if(owners[i]._key == ownerId) {
                 name = owners[i].name;
                 break;
               }
@@ -281,7 +281,7 @@
 
             var name = '';
             for(i = 0; i < registrars.length; i++) {
-              if(registrars[i].id === registrarId) {
+              if(registrars[i]._key == registrarId) {
                 name = registrars[i].name;
                 break;
               }
@@ -315,8 +315,8 @@
             rowData[0] = '<select class="form-control" style="width: 100px;" id="owner' + id + '" >';
             for(i = 0; i < owners.length; i++) {
 
-                rowData[0] += ($(rowData[7]).attr('data-ownerid') == owners[i].id)  ? '<option value="' + owners[i].id + '" selected>' + owners[i].name + '</option>'
-                                                                                    : '<option value="' + owners[i].id + '" >' + owners[i].name + '</option>';
+                rowData[0] += ($(rowData[7]).attr('data-ownerid') == owners[i]._key)  ? '<option value="' + owners[i]._key + '" selected>' + owners[i].name + '</option>'
+                                                                                    : '<option value="' + owners[i]._key + '" >' + owners[i].name + '</option>';
 
             }
             rowData[0] += '</select>';
@@ -324,8 +324,8 @@
             rowData[1] = '<select class="form-control" style="width: 100px;" id="registrar' + id + '" >';
             for(i = 0; i < registrars.length; i++) {
 
-                rowData[1] += ($(rowData[7]).attr('data-registrarid') == registrars[i].id)  ? '<option value="' + registrars[i].id + '" selected>' + registrars[i].name + '</option>'
-                                                                                    : '<option value="' + registrars[i].id + '" >' + registrars[i].name + '</option>';
+                rowData[1] += ($(rowData[7]).attr('data-registrarid') == registrars[i]._key)  ? '<option value="' + registrars[i]._key + '" selected>' + registrars[i].name + '</option>'
+                                                                                    : '<option value="' + registrars[i]._key + '" >' + registrars[i].name + '</option>';
 
             }
             rowData[1] += '</select>';

@@ -198,9 +198,9 @@
            table.row.add(
              [  registrarsList[index].name,
                 registrarsList[index].certificate,
-             '<button type="button" class="btn btn-outline btn-success" onclick="toEditRegistrar('+ registrarsList[index].id +');">Edit</button>',
-             '<button type="button" ' + ' data-id="' + registrarsList[index].id +
-             '" class="btn btn-outline btn-danger" onclick="deleteRegistrar(' + registrarsList[index].id + ');">Delete</button>' ]
+             '<button type="button" class="btn btn-outline btn-success" onclick="toEditRegistrar('+ registrarsList[index]._key +');">Edit</button>',
+             '<button type="button" ' + ' data-id="' + registrarsList[index]._key +
+             '" class="btn btn-outline btn-danger" onclick="deleteRegistrar(' + registrarsList[index]._key + ');">Delete</button>' ]
            ).id(index);
          }
 

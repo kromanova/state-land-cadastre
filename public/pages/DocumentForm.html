@@ -9,7 +9,7 @@
     <meta name="description" content="">
     <meta name="author" content="">
 
-    <title>Connect area with owner</title>
+    <title>Add document</title>
 
     <!-- Bootstrap Core CSS -->
     <link href="../bower_components/bootstrap/dist/css/bootstrap.min.css" rel="stylesheet">
@@ -192,7 +192,7 @@
                             for(var i = 0; i < owners.length; i++) {
 
                               $('#owner').append($('<option>', {
-                                  value: owners[i].id,
+                                  value: owners[i]._key,
                                   text: owners[i].name
                               }));
                             }
