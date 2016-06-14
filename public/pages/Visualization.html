@@ -1,0 +1,222 @@
+<!DOCTYPE html>
+<meta charset="utf-8">
+<style>
+
+.node {
+  stroke: #fff;
+  stroke-width: 1.5px;
+}
+
+.link {
+  fill: none;
+  stroke: #bbb;
+}
+
+</style>
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+
+    <meta charset="utf-8">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <meta name="description" content="">
+    <meta name="author" content="">
+
+    <title>Database</title>
+
+    <!-- Bootstrap Core CSS -->
+    <link href="../bower_components/bootstrap/dist/css/bootstrap.min.css" rel="stylesheet">
+
+    <!-- MetisMenu CSS -->
+    <link href="../bower_components/metisMenu/dist/metisMenu.min.css" rel="stylesheet">
+
+    <!-- DataTables CSS -->
+    <link href="../bower_components/datatables-plugins/integration/bootstrap/3/dataTables.bootstrap.css" rel="stylesheet">
+
+    <!-- DataTables Responsive CSS -->
+    <link href="../bower_components/datatables-responsive/css/dataTables.responsive.css" rel="stylesheet">
+
+    <!-- Custom CSS -->
+    <link href="../dist/css/sb-admin-2.css" rel="stylesheet">
+
+    <!-- Custom Fonts -->
+    <link href="../bower_components/font-awesome/css/font-awesome.min.css" rel="stylesheet" type="text/css">
+</head>
+
+<body>
+    <div id="wrapper">
+        <!-- Navigation -->
+        <nav class="navbar navbar-default navbar-static-top" role="navigation" style="margin-bottom: 0">
+            <div class="navbar-header">
+                <button type="button" class="navbar-toggle" data-toggle="collapse" data-target=".navbar-collapse">
+                    <span class="sr-only">Toggle navigation</span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                    <span class="icon-bar"></span>
+                </button>
+                <a class="navbar-brand" href="index.html">Land Cadastre</a>
+            </div>
+            <!-- /.navbar-header -->
+            <ul class="nav navbar-top-links navbar-right">
+                <!-- /.dropdown -->
+                <li class="dropdown">
+                    <!-- /.dropdown-user -->
+                </li>
+                <!-- /.dropdown -->
+            </ul>
+            <!-- /.navbar-top-links -->
+            <div class="navbar-default sidebar" role="navigation">
+                <div class="sidebar-nav navbar-collapse">
+                    <ul class="nav" id="side-menu">
+                        <li class="sidebar-search">
+                            <div class="input-group custom-search-form">
+                                <input type="text" class="form-control" placeholder="Search...">
+                                <span class="input-group-btn">
+                                    <button class="btn btn-default" type="button">
+                                        <i class="fa fa-search"></i>
+                                    </button>
+                                </span>
+                            </div>
+                            <!-- /input-group -->
+                            </li>
+                            <li>
+                                <a href="#"><i class="fa fa-table fa-fw"></i> Database<span class="fa arrow"></span></a>
+                                <ul class="nav nav-second-level">
+                                    <li>
+                                        <a href="Owners.html">Owners</a>
+                                    </li>
+                                    <li>
+                                        <a href="Registrars.html">Registrars</a>
+                                    </li>
+                                    <li>
+                                        <a href="Documents.html">Documents</a>
+                                    </li>
+                                    <li>
+                                        <a href="Area.html">Areas</a>
+                                    </li>
+                                </ul>
+                                <!-- /.nav-second-level -->
+                                </li>
+                                <li>
+                                    <a href="#"><i class="fa fa-wrench fa-fw"></i> Add new<span class="fa arrow"></span></a>
+                                    <ul class="nav nav-second-level">
+                                        <li>
+                                            <a href="ownerform.html">Owner</a>
+                                        </li>
+                                        <li>
+                                            <a href="registrarform.html">Registrar</a>
+                                        </li>
+                                        <li>
+                                            <a href="DocumentForm.html">Document</a>
+                                        </li>
+                                        <li>
+                                            <a href="areaform.html">Area</a>
+                                        </li>
+                                      </ul>
+                                </li>
+                                <li>
+                                  <a href="Visualization.html"><i class="fa fa-magic fa-fw"></i> Visualization<span></span></a>
+                                </li>
+                      </ul>
+                </div>
+            <!-- /.sidebar-collapse -->
+            </div>
+            </nav>
+
+            <div id="page-wrapper">
+                <div class="row">
+                    <div class="col-lg-12">
+                        <h1 class="page-header">Data visualization</h1>
+                    </div>
+                    <!-- /.col-lg-12 -->
+                </div>
+            </div>
+            <!-- /#wrapper -->
+
+<!-- jQuery -->
+<script src="../bower_components/jquery/dist/jquery.min.js"></script>
+
+<!-- Bootstrap Core JavaScript -->
+<script src="../bower_components/bootstrap/dist/js/bootstrap.min.js"></script>
+
+<!-- Metis Menu Plugin JavaScript -->
+<script src="../bower_components/metisMenu/dist/metisMenu.min.js"></script>
+
+<!-- Custom Theme JavaScript -->
+<script src="../dist/js/sb-admin-2.js"></script>
+
+<!-- TODO download D3.js -->
+<script src="https://d3js.org/d3.v3.min.js" charset="utf-8"></script>
+
+<script>
+
+    
+
+    var width = 1050,
+        height = 600;
+
+    var color = d3.scale.category20();
+
+    var force = d3.layout.force()
+                  			.linkDistance(10)
+                  			.linkStrength(2)
+                  			.size([width, height]);
+
+    var svg = d3.select("#page-wrapper").append("svg")
+                			.attr("width", width)
+                			.attr("height", height);
+
+    d3.json("miserables.json", function(error, graph) {
+
+        if (error) throw error;
+
+        var nodes = graph.nodes.slice(),
+        links = [],
+        bilinks = [];
+
+        graph.links.forEach(function(link) {
+            var s = nodes[link.source],
+            t = nodes[link.target],
+            i = {}; // intermediate node
+            nodes.push(i);
+            links.push({source: s, target: i}, {source: i, target: t});
+            bilinks.push([s, i, t]);
+        });
+
+        force
+              .nodes(nodes)
+              .links(links)
+              .start();
+
+        var link = svg.selectAll(".link")
+                			                   .data(bilinks)
+                			                   .enter().append("path")
+                			                   .attr("class", "link");
+
+        var node = svg.selectAll(".node")
+                                         .data(graph.nodes)
+                			                   .enter().append("circle")
+                                			   .attr("class", "node")
+                                			   .attr("r", 5)
+                                			   .style("fill", function(d) { return color(d.group); })
+                                			   .call(force.drag);
+
+        node.append("title")
+                			      .text(function(d) { return d.name + "\nsdada"; });
+
+        force.on("tick", function() {
+            link.attr("d", function(d) {
+                return "M" + d[0].x + "," + d[0].y
+                				  + "S" + d[1].x + "," + d[1].y
+                				  + " " + d[2].x + "," + d[2].y;
+            });
+
+            node.attr("transform", function(d) {
+                			  return "translate(" + d.x + "," + d.y + ")";
+            });
+        });
+    });
+
+</script>

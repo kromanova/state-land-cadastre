@@ -1,5 +1,7 @@
+const DATABASE_DEFAULT_NAME = "cadastredb";
 
 var orm = require('orm');
+var Database = require('arangojs').Database;
 
 var bunyan = require('bunyan');
 var restify = require('restify');
@@ -30,27 +32,32 @@ var LOG = bunyan.createLogger({
     serializers: restify.bunyan.serializers
 });
 
-// Database connection
-var DATABASE = orm.connect({
-
-    host:     'localhost',
-    database: 'cadastredb',
-    user:     'root',
-    protocol: 'mysql',
-    port:     '3306',
-    query:    {pool: true, debug: true}
-});
-
 // Mainline
 (function main() {
 
-    var server = cadastre.createServer({
-        db: DATABASE,
-        log: LOG,
-        noAudit: true
-    });
+      // Database connection
+      database = new Database('http://127.0.0.1:8529');
 
-    server.listen((8080), '127.0.0.1', function onListening() {
-        LOG.info('listening at %s', server.url);
-    });
+      database.listDatabases().then(names => {
+
+          if (names.indexOf(DATABASE_DEFAULT_NAME) <= -1) {
+
+              database.createDatabase(DATABASE_DEFAULT_NAME).then(
+                  () => LOG.debug('Database "' + DATABASE_DEFAULT_NAME + '" created'),
+                  err => LOG.warn('Failed to create database:', err)
+              );
+          }
+      });
+
+
+      var server = cadastre.createServer({
+          db: database,
+          dbName: DATABASE_DEFAULT_NAME,
+          log: LOG,
+          noAudit: true
+      });
+
+      server.listen((8080), '127.0.0.1', function onListening() {
+          LOG.info('listening at %s', server.url);
+      });
 })();

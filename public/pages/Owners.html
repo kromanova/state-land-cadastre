@@ -107,6 +107,9 @@
 
 
                                                 </li>
+                                                <li>
+                                                    <a href="Visualization.html"><i class="fa fa-magic fa-fw"></i> Visualization<span></span></a>
+                                                </li>
 
                                             </ul>
                                         </div>
@@ -200,11 +203,11 @@
              [ ownersList[index].name,
              (ownersList[index].male) ? "male" : "female",
              ownersList[index].birthPlace,
-             ownersList[index].birthDate,
+             ownersList[index].birthDate.substring(0, 10),
              ownersList[index].address,
-             '<button type="button" class="btn btn-outline btn-success" onclick="toEditOwner('+ ownersList[index].id +');">Edit</button>',
-             '<button type="button" ' + ' data-id="' + ownersList[index].id +
-             '" class="btn btn-outline btn-danger" onclick="deleteOwner(' + ownersList[index].id + ');">Delete</button>' ]
+             '<button type="button" class="btn btn-outline btn-success" onclick="toEditOwner('+ ownersList[index]._key +');">Edit</button>',
+             '<button type="button" ' + ' data-id="' + ownersList[index]._key +
+             '" class="btn btn-outline btn-danger" onclick="deleteOwner(' + ownersList[index]._key + ');">Delete</button>' ]
            ).id(index);
          }
 

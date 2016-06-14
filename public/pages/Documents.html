@@ -104,10 +104,10 @@
                                                               <a href="areaform.html">Area</a>
                                                           </li>
                                                       </ul>
-
-
                                                 </li>
-
+                                                <li>
+                                                    <a href="Visualization.html"><i class="fa fa-magic fa-fw"></i> Visualization<span></span></a>
+                                                </li>
                                             </ul>
                                         </div>
                                         <!-- /.sidebar-collapse -->
@@ -226,7 +226,7 @@
                  [
                     ownerName,
                     documentsList[index].statement,
-                    documentsList[index].date,
+                    documentsList[index].date.substring(0, 10),
                     documentsList[index].enterprise,
                    '<button type="button" class="btn btn-outline btn-success" onclick="toEditDocument('+ documentsList[index].id +');">Edit</button>',
                    '<button type="button" ' + ' data-id="' + documentsList[index].id + '" data-ownerid="' + documentsList[index].owner_id +
