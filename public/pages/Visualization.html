@@ -147,12 +147,11 @@
 <!-- Custom Theme JavaScript -->
 <script src="../dist/js/sb-admin-2.js"></script>
 
-<!-- TODO download D3.js -->
-<script src="https://d3js.org/d3.v3.min.js" charset="utf-8"></script>
+<script src="../js/d3.v3.min.js" charset="utf-8"></script>
 
 <script>
 
-    
+    const DEFAULT_GRAPH_DATA_URL = "http://127.0.0.1:8080/graph-data";
 
     var width = 1050,
         height = 600;
@@ -168,7 +167,7 @@
                 			.attr("width", width)
                 			.attr("height", height);
 
-    d3.json("miserables.json", function(error, graph) {
+    d3.json(DEFAULT_GRAPH_DATA_URL, function(error, graph) {
 
         if (error) throw error;
 
@@ -200,11 +199,15 @@
                 			                   .enter().append("circle")
                                 			   .attr("class", "node")
                                 			   .attr("r", 5)
-                                			   .style("fill", function(d) { return color(d.group); })
+                                			   .style("fill", function(d) {
+                                             return (d.group == 1) ? d3.rgb("red"):
+                                                    (d.group == 2) ? d3.rgb("green"):
+                                                    (d.group == 3) ? d3.rgb("blue"): d3.rgb("DarkOrange");
+                                          })
                                 			   .call(force.drag);
 
         node.append("title")
-                			      .text(function(d) { return d.name + "\nsdada"; });
+                			      .text(function(d) { return d.name + "\n" + JSON.stringify(d.document, null, 2); });
 
         force.on("tick", function() {
             link.attr("d", function(d) {
